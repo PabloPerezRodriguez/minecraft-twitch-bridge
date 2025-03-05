@@ -50,7 +50,7 @@ public class ChatMixin {
           boolean isMeMessage = textWithoutPrefix.startsWith("/me");
 
           // Add the message to the Minecraft Chat
-          TwitchChatMod.addTwitchMessage(formattedTime, username, isMeMessage ? textWithoutPrefix.substring(4) : textWithoutPrefix, userColor, isMeMessage);
+          TwitchChatMod.addTwitchMessage(formattedTime, username, isMeMessage ? textWithoutPrefix.substring(4) : textWithoutPrefix, userColor, new String[]{}, isMeMessage);
           MinecraftClient.getInstance().inGameHud.getChatHud().addToMessageHistory(text);
           info.cancel();
         } else {

@@ -17,6 +17,10 @@ repositories {
 	maven { url 'https://jitpack.io' }
 }
 
+loom {
+	accessWidenerPath = file('src/main/resources/twitchchat.accesswidener')
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"

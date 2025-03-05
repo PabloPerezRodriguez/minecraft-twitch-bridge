@@ -25,6 +25,7 @@
   "mixins": [
     "twitchchat.mixins.json"
   ],
+  "accessWidener": "twitchchat.accesswidener",
 
   "depends": {
     "minecraft": "1.21.4",

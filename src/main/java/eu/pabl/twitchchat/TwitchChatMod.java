@@ -1,5 +1,7 @@
 package eu.pabl.twitchchat;
 
+import eu.pabl.twitchchat.badge.Badge;
+import eu.pabl.twitchchat.badge.BadgeFont;
 import eu.pabl.twitchchat.commands.TwitchBaseCommand;
 import eu.pabl.twitchchat.config.ModConfig;
 import eu.pabl.twitchchat.twitch_integration.Bot;
@@ -13,8 +15,11 @@ import net.minecraft.text.Text;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TwitchChatMod implements ModInitializer {
+  public final static Logger LOGGER = LoggerFactory.getLogger(TwitchChatMod.class);
   public static Bot bot;
 
   @Override
@@ -26,9 +31,15 @@ public class TwitchChatMod implements ModInitializer {
         new TwitchBaseCommand().registerCommands(dispatcher));
   }
 
-  public static void addTwitchMessage(String time, String username, String message, TextColor textColor, boolean isMeMessage) {
+  public static void addTwitchMessage(String time, String username, String message, TextColor textColor, String[] badges, boolean isMeMessage) {
     MutableText timestampText = Text.literal(time);
     MutableText usernameText = Text.literal(username).styled(style -> style.withColor(textColor));
+    MutableText badgesText = Text.literal("");
+    for (String badgeName : badges) {
+      Badge badge = Badge.get(badgeName);
+      if (badge.image() == null) continue;
+      badgesText.append(Text.literal(Character.toString((char) Badge.codePoint(badgeName))).styled(style -> style.withFont(BadgeFont.IDENTIFIER)));
+    }
     MutableText messageBodyText;
 
     if (!isMeMessage) {
@@ -61,6 +72,7 @@ public class TwitchChatMod implements ModInitializer {
     } else {
       MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(
           timestampText
+          .append(badgesText)
           .append(usernameText)
           .append(messageBodyText));
     }

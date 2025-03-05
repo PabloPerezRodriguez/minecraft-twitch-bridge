@@ -5,7 +5,9 @@ import eu.pabl.twitchchat.config.ModConfig;
 import java.awt.Color;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.net.ssl.SSLSocketFactory;
@@ -104,8 +106,12 @@ public class Bot extends ListenerAdapter {
             putFormattingColor(nick, formattingColor);
           }
 
+          String[] badges = Arrays.stream(Objects.requireNonNull(v3Tags.getOrDefault("badges", "")).split(","))
+                  .map(badge -> badge.split("/")[0])
+                  .toArray(String[]::new);
+
           String formattedTime = TwitchChatMod.formatTMISentTimestamp(v3Tags.get("tmi-sent-ts"));
-          TwitchChatMod.addTwitchMessage(formattedTime, nick, message, formattingColor, false);
+          TwitchChatMod.addTwitchMessage(formattedTime, nick, message, formattingColor, badges, false);
         }
       } else {
         System.out.println("Message with no v3tags: " + event.getMessage());
@@ -174,7 +180,7 @@ public class Bot extends ListenerAdapter {
           putFormattingColor(nick, formattingColor);
         }
 
-        TwitchChatMod.addTwitchMessage(formattedTime, nick, event.getMessage(), formattingColor, true);
+        TwitchChatMod.addTwitchMessage(formattedTime, nick, event.getMessage(), formattingColor, new String[]{}, true);
       }
     } else {
       System.out.println("NON-USER ACTION" + event.getMessage());

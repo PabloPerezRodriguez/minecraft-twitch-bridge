@@ -5,6 +5,7 @@
   "mixins": [
   ],
   "client": [
+    "MixinStringRenderOutput",
     "ChatMixin"
   ],
   "injectors": {
